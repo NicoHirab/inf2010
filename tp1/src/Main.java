@@ -25,16 +25,16 @@ public class Main
 				pmt.getPixel(i, j).setAlpha(127);
 		
 		String wName = "Edsger Dijkstra (original)";
-		new DisplayImageWindow(wName, pmc, 50, 50);
+		//new DisplayImageWindow(wName, pmc, 50, 50);
 		
 		wName = "Edsger Dijkstra (gris)";
-		new DisplayImageWindow(wName, pmg, 50+50, 50+50);
+		//new DisplayImageWindow(wName, pmg, 50+50, 50+50);
 		
 		wName = "Edsger Dijkstra (B&W)";
-		new DisplayImageWindow(wName, pmb, 50+100, 50+100);
+		//new DisplayImageWindow(wName, pmb, 50+100, 50+100);
 		
 		wName = "Edsger Dijkstra (Transparent)";
-		new DisplayImageWindow(wName, pmt, 200, 200);
+		//new DisplayImageWindow(wName, pmt, 200, 200);
 		
 		/**
 		 * Exercice 2

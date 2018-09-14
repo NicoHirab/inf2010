@@ -57,29 +57,40 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 	public void negate()
 	{
 		// compl�ter
-
-		for(int i = 0; i < height; i++) {
-			for(int j = 0; j < width; j++) {
-				if(imageType == ImageType.BW) {
-					if(imageData[i][j].toBWPixel().pixel) {
-						imageData[i][j] = new BWPixel(false);
-					}
-				}
-				else if(imageType == ImageType.Gray) {
-					imageData[i][j] = new GrayPixel(255 - imageData[i][j].toGrayPixel().pixel);
-				}
-				else if(imageType == ImageType.Color) {
-					imageData[i][j] = new ColorPixel(new int[] { 255 - imageData[i][j].toColorPixel().rgb[0], 
-																 255 - imageData[i][j].toColorPixel().rgb[1], 
-																 255 - imageData[i][j].toColorPixel().rgb[2]});
-				}
-				else if(imageType == ImageType.Transparent) {
-					imageData[i][j] = new TransparentPixel(new int[] { 255 - imageData[i][j].toTransparentPixel().rgba[0], 
-							 255 - imageData[i][j].toTransparentPixel().rgba[1], 
-							 255 - imageData[i][j].toTransparentPixel().rgba[2],
-							 255});
+		if(imageType == ImageType.BW) {
+			for(int i = 0; i < height; i++) {
+				for(int j = 0; j < width; j++) {
+					imageData[i][j] = new BWPixel(!imageData[i][j].toBWPixel().pixel);
 				}
 			}
+		}
+		else if(imageType == ImageType.Gray) {
+			for(int i = 0; i < height; i++) {
+				for(int j = 0; j < width; j++) {
+					imageData[i][j] = new GrayPixel(255 - imageData[i][j].toGrayPixel().pixel);
+				}
+			}
+		}
+		else if(imageType == ImageType.Color) {
+			for(int i = 0; i < height; i++) {
+				for(int j = 0; j < width; j++) {
+					ColorPixel pixels = imageData[i][j].toColorPixel();
+					imageData[i][j] = new ColorPixel(new int[] { 255 - pixels.rgb[0], 
+							 									 255 - pixels.rgb[1], 
+							 									 255 - pixels.rgb[2]});
+				}
+			}
+		}
+		else if(imageType == ImageType.Transparent) {
+			for(int i = 0; i < height; i++) {
+				for(int j = 0; j < width; j++) {
+					TransparentPixel pixels = imageData[i][j].toTransparentPixel();
+					imageData[i][j] = new TransparentPixel(new int[] { 255 - pixels.rgba[0], 
+							 										   255 - pixels.rgba[1], 
+							 										   255 - pixels.rgba[2],
+							 										   255});
+				}
+			}			
 		}
 	}
 	
@@ -89,11 +100,23 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 	public void convertToBWImage()
 	{
 		// compl�ter
+		PixelMap pxmap = this.toBWImage();
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
-				imageData[i][j].toBWPixel();
+				imageData[i][j] = pxmap.getPixel(i, j);
 			}
 		}
+		imageType = ImageType.BW;
+		
+		
+		/*
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				imageData[i][j] = imageData[i][j].toBWPixel();
+			}
+		}
+		imageType = ImageType.BW;
+		*/
 	}
 	
 	/**
@@ -102,11 +125,23 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 	public void convertToGrayImage()
 	{
 		// compl�ter
+		PixelMap pxmap = this.toGrayImage();
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
-				imageData[i][j].toGrayPixel();
+				imageData[i][j] = pxmap.getPixel(i, j);
 			}
 		}
+		imageType = ImageType.Gray;
+		
+		
+		/*
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				imageData[i][j] = imageData[i][j].toGrayPixel();
+			}
+		}
+		imageType = ImageType.Gray;
+		*/
 	}
 	
 	/**
@@ -115,21 +150,45 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 	public void convertToColorImage()
 	{
 		// compl�ter
+		PixelMap pxmap = this.toColorImage();
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
-				imageData[i][j].toColorPixel();
+				imageData[i][j] = pxmap.getPixel(i, j);
 			}
 		}
+		imageType = ImageType.Color;
+		
+		
+		/*
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				imageData[i][j] = imageData[i][j].toColorPixel();
+			}
+		}
+		imageType = ImageType.Color;
+		*/
 	}
 	
 	public void convertToTransparentImage()
 	{
 		// compl�ter
+		PixelMap pxmap = this.toTransparentImage();
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
-				imageData[i][j].toTransparentPixel();
+				imageData[i][j] = pxmap.getPixel(i, j);
 			}
 		}
+		imageType = ImageType.Transparent;
+		
+		
+		/*
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				imageData[i][j] = imageData[i][j].toTransparentPixel();
+			}
+		}
+		imageType = ImageType.Transparent;
+		*/
 	}
 	
 	
@@ -144,8 +203,47 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 			throw new IllegalArgumentException();
 		
 		// compl�ter
+		for(int i = 0; i < h; i++) {
+			for(int j = 0; j < w; j++) {
+				imageData[i][j] = getPixel(i, j);
+			}
+		}
+		
 		width = w;
 		height = h;
+		/*
+		if(imageType == ImageType.BW) {
+			for(int i = 0; i < h; i++) {
+				for(int j = 0; j < w; j++) {
+					imageData[i][j] = new BWPixel(imageData[i][j].toBWPixel().pixel);
+				}
+			}
+		}
+		else if(imageType == ImageType.Gray) {
+			for(int i = 0; i < h; i++) {
+				for(int j = 0; j < w; j++) {
+					imageData[i][j] = new GrayPixel(imageData[i][j].toGrayPixel().pixel);
+				}
+			}
+		}
+		else if(imageType == ImageType.Color) {
+			for(int i = 0; i < h; i++) {
+				for(int j = 0; j < w; j++) {
+					ColorPixel colorpx = imageData[i][j].toColorPixel();
+					imageData[i][j] = new ColorPixel(new int[] {colorpx.rgb[0], colorpx.rgb[1], colorpx.rgb[2]});
+
+				}
+			}
+		}
+		else if(imageType == ImageType.Transparent) {
+			for(int i = 0; i < h; i++) {
+				for(int j = 0; j < w; j++) {
+					TransparentPixel colorpx = imageData[i][j].toTransparentPixel();
+					imageData[i][j] = new ColorPixel(new int[] {colorpx.rgba[0], colorpx.rgba[1], colorpx.rgba[2], colorpx.rgba[3]});
+				}
+			}			
+		}
+		*/
 	}
 	
 	/**
@@ -154,24 +252,52 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 	public void insert(PixelMap pm, int row0, int col0)
 	{
 		// compl�ter
-		for(int i = row0; i < (row0 + pm.height) && i < height; i++) {
-			for(int j = col0; j < (col0 + pm.width) && j < width; j++) {
-				if(imageType == ImageType.BW) {
-					imageData[i][j] = new BWPixel(pm.imageData[i][j].toBWPixel().pixel);
-				}
-				else if(imageType == ImageType.Gray) {
-					imageData[i][j] = new GrayPixel(pm.imageData[i][j].toGrayPixel().pixel);
-				}
-				else if(imageType == ImageType.Color) {
-					ColorPixel colorpx = pm.imageData[i][j].toColorPixel();
-					imageData[i][j] = new ColorPixel(new int[] {colorpx.rgb[0], colorpx.rgb[1], colorpx.rgb[2]});
-				}
-				else if(imageType == ImageType.Transparent) {
-					TransparentPixel colorpx = pm.imageData[i][j].toTransparentPixel();
-					imageData[i][j] = new ColorPixel(new int[] {colorpx.rgba[0], colorpx.rgba[1], colorpx.rgba[2], colorpx.rgba[3]});
+		for(int i = row0; i < pm.height && i < (row0 + pm.height) && i < height; i++) {
+			for(int j = col0; j < pm.width && j < (col0 + pm.width) && j < width; j++) {
+				imageData[i][j] = pm.getPixel(i, j);
+			}
+		}
+		
+		/*
+		if(imageType == ImageType.BW) {
+			for(int i = row0; i < (row0 + pm.height) && i < height; i++) {
+				for(int j = col0; j < (col0 + pm.width) && j < width; j++) {
+					imageData[i][j] = pm.getPixel(i, j);
+					
+					//imageData[i][j] = new BWPixel(pm.imageData[i][j].toBWPixel().pixel);			
 				}
 			}
 		}
+		else if(imageType == ImageType.Gray) {
+			for(int i = row0; i < (row0 + pm.height) && i < height; i++) {
+				for(int j = col0; j < (col0 + pm.width) && j < width; j++) {
+					imageData[i][j] = pm.getPixel(i, j);
+					
+					//imageData[i][j] = new GrayPixel(pm.imageData[i][j].toGrayPixel().pixel);
+				}
+			}
+		}
+		else if(imageType == ImageType.Color) {
+			for(int i = row0; i < (row0 + pm.height) && i < height; i++) {
+				for(int j = col0; j < (col0 + pm.width) && j < width; j++) {
+					imageData[i][j] = pm.getPixel(i, j);
+					
+					//ColorPixel colorpx = pm.imageData[i][j].toColorPixel();
+					//imageData[i][j] = new ColorPixel(new int[] {colorpx.rgb[0], colorpx.rgb[1], colorpx.rgb[2]});
+				}
+			}
+		}
+		else if(imageType == ImageType.Transparent) {
+			for(int i = row0; i < (row0 + pm.height) && i < height; i++) {
+				for(int j = col0; j < (col0 + pm.width) && j < width; j++) {
+					imageData[i][j] = pm.getPixel(i, j);
+					
+					//TransparentPixel colorpx = pm.imageData[i][j].toTransparentPixel();
+					//imageData[i][j] = new ColorPixel(new int[] {colorpx.rgba[0], colorpx.rgba[1], colorpx.rgba[2], colorpx.rgba[3]});
+				}
+			}			
+		}
+		*/
 	}
 	
 	/**
@@ -179,28 +305,46 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 	 */
 	public void crop(int h, int w)
 	{
-		// compl�ter		
-		for(int i = 0; i < h; i++) {
-			for(int j = 0; j < w; j++) {
-				if(h < height) {
-					//on crop
-					imageData[i][j] = new BWPixel(true);
-				}
-				else if(h >= height) {
-					//on pad
-					imageData[i][j] = new BWPixel(true);
-				}
-				
-				if(w < width) {
-					//on crop
-					imageData[i][j] = new BWPixel(true);
-				}
-				else if(w >= width) {
-					//on pad
-					imageData[i][j] = new BWPixel(true);
+		// compl�ter	
+		if(imageType == ImageType.BW) {
+			for(int i = h; i < height; i++) {
+				for(int j = w; j < width; j++) {
+					imageData[i][j] = new BWPixel(true);				}
+			}
+		}
+		else if(imageType == ImageType.Gray) {
+			for(int i = h; i < height; i++) {
+				for(int j = w; j < width; j++) {
+					imageData[i][j] = new GrayPixel(255);
 				}
 			}
 		}
+		else if(imageType == ImageType.Color) {
+			for(int i = h; i < height; i++) {
+				for(int j = w; j < width; j++) {
+					imageData[i][j] = new ColorPixel(new int[] {255, 255, 255});
+
+				}
+			}
+		}
+		else if(imageType == ImageType.Transparent) {
+			for(int i = h; i < height; i++) {
+				for(int j = w; j < width; j++) {
+					imageData[i][j] = new ColorPixel(new int[] {255, 255, 255, 255});
+				}
+			}			
+		}
+
+		height = h;
+		width = w;
+		
+		/*
+		for(int i = h; i < height; i++) {
+			for(int j = w; j < width; j++) {
+				imageData[i][j] = new BWPixel(true);
+			}
+		}
+		*/
 	}
 	
 	/**
@@ -209,24 +353,52 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 	public void translate(int rowOffset, int colOffset)
 	{
 		// compl�ter		
-		for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
-			for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
-				if(imageType == ImageType.BW) {
-					imageData[i][j] = new BWPixel(imageData[i - rowOffset][j - colOffset].toBWPixel().pixel);
-				}
-				else if(imageType == ImageType.Gray) {
-					imageData[i][j] = new GrayPixel(imageData[i - rowOffset][j - colOffset].toGrayPixel().pixel);
-				}
-				else if(imageType == ImageType.Color) {
-					ColorPixel colorpx = imageData[i - rowOffset][j - colOffset].toColorPixel();
-					imageData[i][j] = new ColorPixel(new int[] {colorpx.rgb[0], colorpx.rgb[1], colorpx.rgb[2]});
-				}
-				else if(imageType == ImageType.Transparent) {
-					TransparentPixel colorpx = imageData[i - rowOffset][j - colOffset].toTransparentPixel();
-					imageData[i][j] = new ColorPixel(new int[] {colorpx.rgba[0], colorpx.rgba[1], colorpx.rgba[2], colorpx.rgba[3]});
+		if(imageType == ImageType.BW) {
+			PixelMap pxmap = this.toBWImage();
+			
+			for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
+				for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
+					this.imageData[i][j] = pxmap.getPixel(i - rowOffset, j - colOffset);
+								
+					//imageData[i][j] = new BWPixel(imageData[i - rowOffset][j - colOffset].toBWPixel().pixel);
 				}
 			}
 		}
-	}
-	
+		else if(imageType == ImageType.Gray) {
+			PixelMap pxmap = this.toGrayImage();
+
+			for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
+				for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
+					this.imageData[i][j] = pxmap.getPixel(i - rowOffset, j - colOffset);
+					
+					//imageData[i][j] = new GrayPixel(imageData[i - rowOffset][j - colOffset].toGrayPixel().pixel);
+				}
+			}
+		}
+		else if(imageType == ImageType.Color) {
+			PixelMap pxmap = this.toColorImage();
+
+			for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
+				for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
+					this.imageData[i][j] = pxmap.getPixel(i - rowOffset, j - colOffset);
+					
+					//ColorPixel colorpx = imageData[i - rowOffset][j - colOffset].toColorPixel();
+					//imageData[i][j] = new ColorPixel(new int[] {colorpx.rgb[0], colorpx.rgb[1], colorpx.rgb[2]});
+				}
+			}
+		}
+		else if(imageType == ImageType.Transparent) {
+			PixelMap pxmap = this.toTransparentImage();
+
+			for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
+				for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
+					this.imageData[i][j] = pxmap.getPixel(i - rowOffset, j - colOffset);
+
+					//TransparentPixel colorpx = imageData[i - rowOffset][j - colOffset].toTransparentPixel();
+					//imageData[i][j] = new TransparentPixel(new int[] {colorpx.rgba[0], colorpx.rgba[1], colorpx.rgba[2], colorpx.rgba[3]});
+		
+				}
+			}
+		}
+	}	
 }

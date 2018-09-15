@@ -309,7 +309,7 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 		if(imageType == ImageType.BW) {
 			for(int i = h; i < height; i++) {
 				for(int j = w; j < width; j++) {
-					imageData[i][j] = new BWPixel(true);			
+					imageData[j][j] = new BWPixel(true);			
 				}
 			}
 		}

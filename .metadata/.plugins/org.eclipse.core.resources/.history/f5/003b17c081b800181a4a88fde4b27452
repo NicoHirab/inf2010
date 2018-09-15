@@ -359,7 +359,7 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 			
 			for(int i = rowOffset; i <  height + rowOffset; i++) {
 				for(int j = colOffset; j < width + colOffset; j++) {
-					this.imageData[i][j] = pxmap.getPixel(i + rowOffset, j + colOffset);
+					this.imageData[j][j] = pxmap.getPixel(i + rowOffset, j + colOffset);
 								
 					//imageData[i][j] = new BWPixel(imageData[i - rowOffset][j - colOffset].toBWPixel().pixel);
 				}

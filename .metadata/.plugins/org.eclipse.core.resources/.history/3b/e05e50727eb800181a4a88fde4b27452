@@ -357,9 +357,9 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 		if(imageType == ImageType.BW) {
 			PixelMap pxmap = this.toBWImage();
 			
-			for(int i = rowOffset; i <  height + rowOffset; i++) {
-				for(int j = colOffset; j < width + colOffset; j++) {
-					this.imageData[i][j] = pxmap.getPixel(i + rowOffset, j + colOffset);
+			for(int i = rowOffset; i < (rowOffset + height); i++) {
+				for(int j = colOffset; j < (colOffset + width); j++) {
+					this.imageData[i - rowOffset][j - colOffset] = pxmap.getPixel(i, j);
 								
 					//imageData[i][j] = new BWPixel(imageData[i - rowOffset][j - colOffset].toBWPixel().pixel);
 				}
@@ -368,33 +368,36 @@ public class PixelMapPlus extends PixelMap implements ImageOperations
 		else if(imageType == ImageType.Gray) {
 			PixelMap pxmap = this.toGrayImage();
 
-			for(int i = rowOffset; i <  height + rowOffset; i++) {
-				for(int j = colOffset; j < width + colOffset; j++) {
-					this.imageData[i][j] = pxmap.getPixel(i + rowOffset, j + colOffset);
-								
-					//imageData[i][j] = new BWPixel(imageData[i - rowOffset][j - colOffset].toBWPixel().pixel);
+			for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
+				for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
+					this.imageData[i][j] = pxmap.getPixel(i - rowOffset, j - colOffset);
+					
+					//imageData[i][j] = new GrayPixel(imageData[i - rowOffset][j - colOffset].toGrayPixel().pixel);
 				}
 			}
 		}
 		else if(imageType == ImageType.Color) {
 			PixelMap pxmap = this.toColorImage();
 
-			for(int i = rowOffset; i <  height + rowOffset; i++) {
-				for(int j = colOffset; j < width + colOffset; j++) {
-					this.imageData[i][j] = pxmap.getPixel(i + rowOffset, j + colOffset);
-								
-					//imageData[i][j] = new BWPixel(imageData[i - rowOffset][j - colOffset].toBWPixel().pixel);
+			for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
+				for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
+					this.imageData[i][j] = pxmap.getPixel(i - rowOffset, j - colOffset);
+					
+					//ColorPixel colorpx = imageData[i - rowOffset][j - colOffset].toColorPixel();
+					//imageData[i][j] = new ColorPixel(new int[] {colorpx.rgb[0], colorpx.rgb[1], colorpx.rgb[2]});
 				}
 			}
 		}
 		else if(imageType == ImageType.Transparent) {
 			PixelMap pxmap = this.toTransparentImage();
 
-			for(int i = rowOffset; i <  height + rowOffset; i++) {
-				for(int j = colOffset; j < width + colOffset; j++) {
-					this.imageData[i][j] = pxmap.getPixel(i + rowOffset, j + colOffset);
-								
-					//imageData[i][j] = new BWPixel(imageData[i - rowOffset][j - colOffset].toBWPixel().pixel);
+			for(int i = rowOffset; i < (rowOffset + height) && i < height; i++) {
+				for(int j = colOffset; j < (colOffset + width) && j < width; j++) {
+					this.imageData[i][j] = pxmap.getPixel(i - rowOffset, j - colOffset);
+
+					//TransparentPixel colorpx = imageData[i - rowOffset][j - colOffset].toTransparentPixel();
+					//imageData[i][j] = new TransparentPixel(new int[] {colorpx.rgba[0], colorpx.rgba[1], colorpx.rgba[2], colorpx.rgba[3]});
+		
 				}
 			}
 		}
